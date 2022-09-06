@@ -1,0 +1,38 @@
+#!/usr/bin/env zsh
+
+cd `dirname $0`
+
+local -a args
+while [ $1 ]; do
+    args=($args[*] $1)
+    shift
+done
+
+help() {
+    echo -e "usage: use [-h | --help] <command> [<args>]"
+    echo -e ""
+    echo -e "<command>"
+    echo -e "  colorpalette"
+    echo -e "    show my colorpalette"
+}
+
+if (( $#args == 0 )); then
+    help
+    return
+fi
+
+case $args[1] in
+    -h|--help)
+        help
+        return
+        ;;
+    colorpalette)
+        dart run ../src/colorpalette/bin/colorpalette.dart $args[2,-1]
+        return
+        ;;
+    *)
+        echo "No such command \"$args[1]\""
+        return
+        ;;
+esac
+
