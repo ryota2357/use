@@ -74,7 +74,7 @@ void showPalette({required bool showName, String? text}) {
         ' ${fgText(p.color500dark, showName: showName, text: text)}' +
         ' ${fgText(p.color600light, showName: showName, text: text)}' +
         ' ${fgText(p.color600, showName: showName, text: text)}' +
-        ' ${fgText(p.color500dark, showName: showName, text: text)}';
+        ' ${fgText(p.color600dark, showName: showName, text: text)}';
     // ignore: prefer_interpolation_to_compose_strings
     final bg = ' '.padLeft(p.name.length) +
         ' ${bgText(p.color500light)}' +
@@ -82,7 +82,7 @@ void showPalette({required bool showName, String? text}) {
         ' ${bgText(p.color500dark)}' +
         ' ${bgText(p.color600light)}' +
         ' ${bgText(p.color600)}' +
-        ' ${bgText(p.color500dark)}';
+        ' ${bgText(p.color600dark)}';
     put(fg);
     put(bg);
   }
