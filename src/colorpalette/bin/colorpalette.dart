@@ -6,7 +6,6 @@ import 'package:colorpalette/colorpalette.dart';
 const help = 'help';
 const name = 'name';
 const text = 'text';
-const fg = 'fg';
 const bg = 'bg';
 
 void main(List<String> arguments) {
@@ -16,39 +15,15 @@ void main(List<String> arguments) {
     ..addFlag(help, abbr: 'h')
     ..addFlag(name, abbr: 'n')
     ..addOption(text, abbr: 't')
-    ..addOption(bg, abbr: 'b')
-    ..addOption(fg, abbr: 'f');
+    ..addOption(bg, abbr: 'b');
   final argResults = parser.parse(arguments);
 
   if (argResults[help] as bool) {
     printHelp();
-  } else {
-    setColors(argResults[fg] as String?, argResults[bg] as String?);
-    final n = argResults[name] as bool;
-
-    if (n == false) {
-      final t = argResults[text] as String?;
-      showPalette(showName: n, text: t);
-    } else {
-      showPalette(showName: n);
-    }
+    return;
   }
-}
 
-void setColors(String? f, String? b) {
-  if (f != null) {
-    try {
-      if (f.startsWith('#')) {
-        forground(f.substring(1));
-      } else {
-        forground(f);
-      }
-    } on Exception catch (e) {
-      stdout
-        ..writeln('Invalid forground color: $f')
-        ..writeln(e);
-    }
-  }
+  final b = argResults[bg] as String?;
   if (b != null) {
     try {
       if (b.startsWith('#')) {
@@ -58,10 +33,16 @@ void setColors(String? f, String? b) {
       }
     } on Exception catch (e) {
       stdout
-        ..writeln('Invalid background color: $f')
+        ..writeln('Invalid background color: $b')
         ..writeln(e);
+      return;
     }
   }
+
+  showPalette(
+    showName: argResults[name] as bool,
+    text: argResults[text] as String?,
+  );
 }
 
 void showPalette({required bool showName, String? text}) {

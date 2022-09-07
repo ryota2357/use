@@ -1,21 +1,20 @@
 import 'dart:io';
+import 'dart:math';
 
 var _defaultBg = '\x1B[48;2;255;255;255m';
 var _defaultFg = '\x1B[38;2;0;0;0m';
 const _reset = '\x1B[0m';
 
-int _parseR(String color) => int.parse(color.substring(0, 2), radix: 16);
-int _parseG(String color) => int.parse(color.substring(2, 4), radix: 16);
-int _parseB(String color) => int.parse(color.substring(4, 6), radix: 16);
-
-void background(String color) => _defaultBg = '\x1B[48;2;r;g;bm'
-    .replaceFirst('r', _parseR(color).toString())
-    .replaceFirst('g', _parseG(color).toString())
-    .replaceFirst('b', _parseB(color).toString());
-void forground(String color) => _defaultFg = '\x1B[38;2;r;g;bm'
-    .replaceFirst('r', _parseR(color).toString())
-    .replaceFirst('g', _parseG(color).toString())
-    .replaceFirst('b', _parseB(color).toString());
+void background(String color) {
+  _defaultBg = '\x1B[48;2;r;g;bm'
+      .replaceFirst('r', _parseR(color).toString())
+      .replaceFirst('g', _parseG(color).toString())
+      .replaceFirst('b', _parseB(color).toString());
+  final whiteRatio = _calculateContrastRatio(color, 'ffffff');
+  final blackRatio = _calculateContrastRatio(color, '000000');
+  _defaultFg =
+      whiteRatio > blackRatio ? '\x1B[38;2;255;255;255m' : '\x1B[38;2;0;0;0m';
+}
 
 String bgText(String color) {
   final r = _parseR(color);
@@ -53,4 +52,41 @@ class ColorUnit {
   final String color600light;
   final String color600;
   final String color600dark;
+}
+
+int _parseR(String color) => int.parse(color.substring(0, 2), radix: 16);
+int _parseG(String color) => int.parse(color.substring(2, 4), radix: 16);
+int _parseB(String color) => int.parse(color.substring(4, 6), radix: 16);
+
+double _calculateContrastRatio(String color1, String color2) {
+  double calculateRelativeLuminance(num r, num g, num b) {
+    double luminance(double c) {
+      final u = c / 255;
+      if (u <= 0.03928) {
+        return u / 12.92;
+      } else {
+        return pow((u + 0.055) / 1.055, 2.4) as double;
+      }
+    }
+
+    final lr = luminance(r.toDouble());
+    final lg = luminance(g.toDouble());
+    final lb = luminance(b.toDouble());
+    return 0.2126 * lr + 0.7152 * lg + 0.0722 * lb;
+  }
+
+  final luminance1 = calculateRelativeLuminance(
+    _parseR(color1),
+    _parseG(color1),
+    _parseB(color1),
+  );
+  final luminance2 = calculateRelativeLuminance(
+    _parseR(color2),
+    _parseG(color2),
+    _parseB(color2),
+  );
+
+  final bright = max(luminance1, luminance2);
+  final dark = min(luminance1, luminance2);
+  return (bright + 0.05) / (dark + 0.05);
 }
