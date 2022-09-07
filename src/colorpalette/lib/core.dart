@@ -6,12 +6,16 @@ var _defaultFg = '\x1B[38;2;0;0;0m';
 const _reset = '\x1B[0m';
 
 void background(String color) {
+  final col = color.startsWith('#') ? color.substring(1) : color;
+  if (RegExp(r'^[0-9a-fA-F]{6}').hasMatch(col) == false) {
+    throw FormatException('Invalid background color: $color');
+  }
   _defaultBg = '\x1B[48;2;r;g;bm'
-      .replaceFirst('r', _parseR(color).toString())
-      .replaceFirst('g', _parseG(color).toString())
-      .replaceFirst('b', _parseB(color).toString());
-  final whiteRatio = _calculateContrastRatio(color, 'ffffff');
-  final blackRatio = _calculateContrastRatio(color, '000000');
+      .replaceFirst('r', _parseR(col).toString())
+      .replaceFirst('g', _parseG(col).toString())
+      .replaceFirst('b', _parseB(col).toString());
+  final whiteRatio = _calculateContrastRatio(col, 'ffffff');
+  final blackRatio = _calculateContrastRatio(col, '000000');
   _defaultFg =
       whiteRatio > blackRatio ? '\x1B[38;2;255;255;255m' : '\x1B[38;2;0;0;0m';
 }

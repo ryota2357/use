@@ -26,15 +26,11 @@ void main(List<String> arguments) {
   final b = argResults[bg] as String?;
   if (b != null) {
     try {
-      if (b.startsWith('#')) {
-        background(b.substring(1));
-      } else {
-        background(b);
-      }
-    } on Exception catch (e) {
-      stdout
-        ..writeln('Invalid background color: $b')
-        ..writeln(e);
+      background(b);
+    } on FormatException catch (e) {
+      stderr
+        ..writeln(e)
+        ..writeln('You can use only "#xxxxxx" or "xxxxxx"');
       return;
     }
   }
