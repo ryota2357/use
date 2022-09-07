@@ -85,10 +85,6 @@ Options:
       Use specified text as text of forground color sample.
       If use with --name options, this option is ignored.
 
-  --fg     -f  [args: String]
-      Set forground color of normal text.
-      Defaut: "#000000"
-
   --bg     -b  [args: String]
       Set background color of normal text.
       Defaut: "#ffffff"
