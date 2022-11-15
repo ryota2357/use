@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+local cwd=`pwd`
+
 cd `dirname $0`
 
 local -a args
@@ -9,11 +11,13 @@ while [ $1 ]; do
 done
 
 help() {
-    echo -e "usage: use [-h | --help] <command> [<args>]"
+    echo -e "Usage: use [-h | --help] <command> [<args>]"
     echo -e ""
     echo -e "<command>"
     echo -e "  colorpalette"
-    echo -e "    show my colorpalette"
+    echo -e "    Show my colorpalette"
+    echo -e "  trash"
+    echo -e "    Send file/directory to trash"
 }
 
 if (( $#args == 0 )); then
@@ -28,6 +32,10 @@ case $args[1] in
         ;;
     colorpalette)
         dart run ../src/colorpalette/bin/colorpalette.dart $args[2,-1]
+        return
+        ;;
+    trash)
+        ../src/trash/trash.sh $cwd $args[2,-1]
         return
         ;;
     *)
