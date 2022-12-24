@@ -2,7 +2,7 @@
 
 local cwd=`pwd`
 
-cd `dirname $0`
+cd "$(dirname "$0")" || exit 1
 
 local -a args
 while [ $1 ]; do
@@ -48,3 +48,5 @@ case $args[1] in
         echo "No such command \"$args[1]\""
         ;;
 esac
+
+# vim: set ft=bash :for syntax highlight
