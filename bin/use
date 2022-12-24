@@ -32,6 +32,9 @@ case $args[1] in
     colorpalette)
         dart run ../src/colorpalette/bin/colorpalette.dart $args[2,-1]
         ;;
+    termcolors)
+        ruby ../src/termcolors/termcolors.rb
+        ;;
     trash)
         ../src/trash/trash.sh $cwd $args[2,-1]
         ;;
