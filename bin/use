@@ -28,30 +28,23 @@ fi
 case $args[1] in
     -h|--help)
         help
-        return
         ;;
     colorpalette)
         dart run ../src/colorpalette/bin/colorpalette.dart $args[2,-1]
-        return
         ;;
     trash)
         ../src/trash/trash.sh $cwd $args[2,-1]
-        return
         ;;
     setup)
         cd ../src/colorpalette
         dart pub get
-        return
         ;;
     upgrade)
         git pull origin main
         cd ../src/colorpalette
         dart pub upgrade
-        return
         ;;
     *)
         echo "No such command \"$args[1]\""
-        return
         ;;
 esac
-
